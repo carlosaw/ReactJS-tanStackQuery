@@ -11,6 +11,7 @@ const Page = () => {
       <h1 className="text-white text-3xl">Opa, tudo bem?</h1>
 
       {posts.isLoading && "Carregando..."}
+      {!posts.isLoading && posts.isFetching && "Está REcarregando..."}
 
       {posts.data &&
         <ul>
