@@ -1,18 +1,18 @@
 "use client";
 
-import {SubmitHandler, useForm } from "react-hook-form";
-import { Inputs } from "@/types/Inputs";
+import {Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SignUpForm } from "@/types/SignUpForm";
+import { Input } from "@mui/material";
 
 const Page = () => {
   // Criação do formulário
-  const { 
-    handleSubmit, 
-    register,
-    formState: { errors } 
-  } = useForm<Inputs>();
+  const {
+    control,
+    handleSubmit,
+  } = useForm<SignUpForm>();
 
   // Função para receber os dados
-  const handleFormSubmit: SubmitHandler<Inputs> = (data) => {
+  const handleFormSubmit: SubmitHandler<SignUpForm> = (data) => {
     console.log(data);
   }
 
@@ -21,31 +21,48 @@ const Page = () => {
 
       {/* Criação do formlário com registro */}
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <input 
-          {...register('name', { required: true, minLength: 3, maxLength: 20 })} 
-          className="border border-white p-3 text-black"
-          placeholder="Digite seu nome"
-        />
-        {errors.name?.type === 'required' && <p>Campo obrigatório</p>}
-        {/* {errors.name && <p>Este item precisa ser preenchido corretamente</p>} */}
-        {errors.name?.type === 'minLength' && <p>Precisa ter 2 caracteres</p>}
-        <input 
-          {...register('lastName')} 
-          className="block mt-4 border border-white p-3 text-black"
-          placeholder="Digite seu nome"
+
+        <Controller 
+          control={control}
+          name="name"
+          rules={ {required: true, minLength: 2, maxLength: 20} }
+          render={({ field, fieldState }) => 
+            <Input 
+              {...field}
+              error={fieldState.invalid}
+              style={{ backgroundColor: "#FFF" }} 
+            />
+          }
         />
 
-        <input
-          type="number" 
-          {...register('age', { required: 'Campo idade obrigatório', min: 18, max: 120 })} 
-          className="block mt-4 border border-white p-3 text-black"
-          placeholder="Digite sua idade"
+        <Controller 
+          control={control}
+          name="lastName"
+          render={({ field, fieldState }) => 
+            <Input 
+              {...field}
+              error={fieldState.invalid}
+              style={{ backgroundColor: "#FFF" }} 
+            />
+          }
         />
-        {/* {errors.age && <p>Idade precisa ser entre 18 e 120 anos.</p>} */}
-        {errors.age && <p>{errors.age.message}</p>}
-        <input type="submit" value="Enviar" />
 
-      </form>  
+        <Controller 
+          control={control}
+          name="age"
+          rules={{ required: true, min: 18 }}
+          render={({ field, fieldState }) => 
+            <Input 
+              {...field}
+              error={fieldState.invalid}
+              style={{ backgroundColor: "#FFF" }} 
+            />
+          }         
+        />
+
+      <input type="submit" value="Enviar" />
+
+      </form>
 
     </div>     
   );
