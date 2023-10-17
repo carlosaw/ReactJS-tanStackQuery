@@ -1,69 +1,53 @@
 "use client";
 
-import {Controller, SubmitHandler, useForm } from "react-hook-form";
-import { SignUpForm } from "@/types/SignUpForm";
-import { Input } from "@mui/material";
+import { z } from 'zod';
+import { useForm } from  'react-hook-form';
+import { zodResolver} from '@hookform/resolvers/zod';
+
+const SignUpFormSchema = z.object({
+  name: z.string().min(2, 'Mínimo 2 letras').max(20, 'Máximo 20 letras'),
+  lastName: z.string().optional(),
+  age: z.number({ invalid_type_error: 'Idade precisa ser um número' }).min(18, "Mínimo 18 anos")
+});
 
 const Page = () => {
-  // Criação do formulário
-  const {
-    control,
-    handleSubmit,
-  } = useForm<SignUpForm>();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(SignUpFormSchema)
+  });
 
-  // Função para receber os dados
-  const handleFormSubmit: SubmitHandler<SignUpForm> = (data) => {
-    console.log(data);
+  const handleSignUpForm = () => {
+    alert("Vai enviar...");
   }
-
+  
   return (
     <div className="container mx-auto">
+      <form onSubmit={handleSubmit(handleSignUpForm)}>
+        <div>
+          <input
+            {...register('name')}
+            className='border border-white p-3 m-3 text-black'
+          />
+          {errors.name && <p>{errors.name.message as string}</p>}
+        </div>
 
-      {/* Criação do formlário com registro */}
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <div>
+          <input
+            {...register('lastName')}
+            className='border border-white p-3 m-3 text-black'
+          />
+          {errors.lastName && <p>{errors.lastName.message as string}</p>}
+        </div>
 
-        <Controller 
-          control={control}
-          name="name"
-          rules={ {required: true, minLength: 2, maxLength: 20} }
-          render={({ field, fieldState }) => 
-            <Input 
-              {...field}
-              error={fieldState.invalid}
-              style={{ backgroundColor: "#FFF" }} 
-            />
-          }
-        />
+        <div>
+          <input
+            {...register('age', { valueAsNumber: true })}
+            className='border border-white p-3 m-3 text-black'
+          />
+          {errors.age && <p>{errors.age.message as string}</p>}
+        </div>
 
-        <Controller 
-          control={control}
-          name="lastName"
-          render={({ field, fieldState }) => 
-            <Input 
-              {...field}
-              error={fieldState.invalid}
-              style={{ backgroundColor: "#FFF" }} 
-            />
-          }
-        />
-
-        <Controller 
-          control={control}
-          name="age"
-          rules={{ required: true, min: 18 }}
-          render={({ field, fieldState }) => 
-            <Input 
-              {...field}
-              error={fieldState.invalid}
-              style={{ backgroundColor: "#FFF" }} 
-            />
-          }         
-        />
-
-      <input type="submit" value="Enviar" />
-
+        <input type='submit' value='Cadastrar' />
       </form>
-
     </div>     
   );
 }

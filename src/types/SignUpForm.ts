@@ -1,5 +1,5 @@
 export type SignUpForm = {
-  name: string;
-  lastName: string;
-  age: number;
+  name: string; // required, minLength: 2, maxLength: 20
+  lastName: string; // minLength: 2
+  age: number; // required, min: 18
 }
