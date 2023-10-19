@@ -25,7 +25,7 @@ const Page = () => {
         <div>
           <input
             {...register('name')}
-            className='border border-white p-3 m-3 text-black'
+            className='border border-white p-3 my-3 text-black'
           />
           {errors.name && <p>{errors.name.message as string}</p>}
         </div>
@@ -33,7 +33,7 @@ const Page = () => {
         <div>
           <input
             {...register('lastName')}
-            className='border border-white p-3 m-3 text-black'
+            className='border border-white p-3 my-3 text-black'
           />
           {errors.lastName && <p>{errors.lastName.message as string}</p>}
         </div>
@@ -41,12 +41,13 @@ const Page = () => {
         <div>
           <input
             {...register('age', { valueAsNumber: true })}
-            className='border border-white p-3 m-3 text-black'
+            className='border border-white p-3 my-3 text-black'
           />
           {errors.age && <p>{errors.age.message as string}</p>}
         </div>
 
-        <input type='submit' value='Cadastrar' />
+        <input type='submit' value='Cadastrar'
+          className='border-none bg-green-500 p-2 rounded-md mt-3 cursor-pointer hover:opacity-80 text-black' />
       </form>
     </div>     
   );
